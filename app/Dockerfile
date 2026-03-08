@@ -1,8 +1,8 @@
 FROM golang:1.24-alpine AS builder
-WORKDIR /src
+WORKDIR /app
 RUN apk add --no-cache wget
 
-COPY app/go.mod app/go.sum ./
+COPY go.mod go.sum ./
 RUN go mod download
 
 COPY app/. .
