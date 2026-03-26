@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"net/http"
+
 	api "github.com/brunobotter/map/api/http"
 	"github.com/brunobotter/map/application/usecase"
 
@@ -11,10 +13,25 @@ type MapHandler struct {
 	mapUsecase usecase.MapUsecase
 }
 
-func NewMapHandler() *MapHandler {
-	return &MapHandler{}
+func NewMapHandler(mapUsecase usecase.MapUsecase) *MapHandler {
+	return &MapHandler{mapUsecase: mapUsecase}
 }
 
 func (h *MapHandler) MapData(reque requests.MapRequest) *api.HttpResponse {
-	return api.Ok("")
+	result, err := h.mapUsecase.Execute(reque.Context())
+	if err != nil {
+		return &api.HttpResponse{
+			StatusCode: http.StatusOK,
+			Body: map[string]any{
+				"weather": map[string]any{},
+				"traffic": []any{},
+				"events":  []any{},
+			},
+		}
+	}
+
+	return &api.HttpResponse{
+		StatusCode: http.StatusOK,
+		Body:       result,
+	}
 }
