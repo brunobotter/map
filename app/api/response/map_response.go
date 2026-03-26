@@ -2,7 +2,7 @@ package response
 
 import "time"
 
-type CreateTenantResponse struct {
+type MapResponse struct {
 	TenantId string
 	Name     string
 	CreateAt time.Time
