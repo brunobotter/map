@@ -39,8 +39,6 @@ func getPanicRecoveryMiddlewareFunc(log logger.Logger) echo.MiddlewareFunc {
 						panicMessage = "unknown panic"
 					}
 
-					log := logger.LoggerFromContext(ctx.Request().Context())
-
 					log.Error(fmt.Errorf("PANIC RECOVERED IN REQUEST - Path: %s, Method: %s, Error: %v",
 						ctx.Request().URL.Path,
 						ctx.Request().Method,

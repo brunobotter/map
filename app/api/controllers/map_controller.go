@@ -17,7 +17,7 @@ func NewMapHandler(mapUsecase usecase.MapUsecase) *MapHandler {
 	return &MapHandler{mapUsecase: mapUsecase}
 }
 
-func (h *MapHandler) MapData(reque requests.MapRequest) *api.HttpResponse {
+func (h *MapHandler) MapData(reque *requests.MapRequest) *api.HttpResponse {
 	result, err := h.mapUsecase.Execute(reque.Context())
 	if err != nil {
 		return &api.HttpResponse{
