@@ -7,12 +7,15 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/brunobotter/map/application/domain"
 	httpContract "github.com/brunobotter/map/application/http"
 	appIntegration "github.com/brunobotter/map/application/integration"
 	"github.com/brunobotter/map/main/config"
 )
+
+const defaultOpenWeatherBaseURL = "https://api.openweathermap.org"
 
 type openWeatherIntegration struct {
 	httpClient httpContract.Client
@@ -28,7 +31,8 @@ func (s *openWeatherIntegration) GetWeather(ctx context.Context, lat, lng float6
 		return domain.Weather{}, fmt.Errorf("missing openweather api key")
 	}
 
-	endpoint := fmt.Sprintf("%s/data/2.5/weather", s.cfg.Weather.BaseURL)
+	baseURL := normalizeBaseURL(s.cfg.Weather.BaseURL)
+	endpoint := fmt.Sprintf("%s/data/2.5/weather", baseURL)
 	query := url.Values{}
 	query.Set("lat", strconv.FormatFloat(lat, 'f', 6, 64))
 	query.Set("lon", strconv.FormatFloat(lng, 'f', 6, 64))
@@ -73,4 +77,16 @@ func (s *openWeatherIntegration) GetWeather(ctx context.Context, lat, lng float6
 	}
 
 	return domain.Weather{Temperature: payload.Main.Temp, Status: condition, Unit: "C"}, nil
+}
+func normalizeBaseURL(baseURL string) string {
+	trimmed := strings.TrimSpace(baseURL)
+	if trimmed == "" {
+		return defaultOpenWeatherBaseURL
+	}
+
+	if !strings.HasPrefix(trimmed, "http://") && !strings.HasPrefix(trimmed, "https://") {
+		trimmed = "https://" + trimmed
+	}
+
+	return strings.TrimRight(trimmed, "/")
 }

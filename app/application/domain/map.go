@@ -7,19 +7,13 @@ type Weather struct {
 }
 
 type Traffic struct {
-	Road   string `json:"road"`
-	Level  string `json:"level"`
-	Status string `json:"status"`
-}
-
-type MapEvent struct {
-	Title    string `json:"title"`
-	Location string `json:"location"`
-	StartAt  string `json:"start_at"`
+	Lat  float64 `json:"lat"`
+	Lng  float64 `json:"lng"`
+	Type string  `json:"type"`
 }
 
 type MapData struct {
-	Weather Weather    `json:"weather"`
-	Traffic []Traffic  `json:"traffic"`
-	Events  []MapEvent `json:"events"`
+	Weather Weather   `json:"weather"`
+	Traffic []Traffic `json:"traffic"`
+	Events  []Event   `json:"events"`
 }

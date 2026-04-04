@@ -18,6 +18,6 @@ type DatabaseConfig struct {
 }
 
 type WeatherConfig struct {
-	BaseURL string `mapstruct:"base_url"`
-	APIKey  string `mapstruct:"api_key"`
+	BaseURL string `mapstruct:"url"`
+	APIKey  string `mapstruct:"apikey"`
 }
