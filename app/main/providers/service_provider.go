@@ -30,7 +30,11 @@ func (p *ServiceProvider) Register(c container.Container) {
 		return service.NewWeatherService(weatherIntegration)
 	})
 
-	c.Singleton(func(weatherService service.WeatherService, mapRepository repo.MapRepository) service.MapService {
-		return service.NewMapService(weatherService, mapRepository)
+	c.Singleton(func() service.TrafficService {
+		return service.NewTrafficService()
+	})
+
+	c.Singleton(func(weatherService service.WeatherService, trafficService service.TrafficService, mapRepository repo.MapRepository) service.MapService {
+		return service.NewMapService(weatherService, trafficService, mapRepository)
 	})
 }

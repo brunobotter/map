@@ -14,6 +14,8 @@
 - Cliente HTTP com timeout de 5s e retry para falhas transitórias.
 - Integração OpenWeather via camada de integração.
 - Encadeamento Handler -> UseCase -> Service -> Integration/Repository.
+- Modelagem de tráfego com coordenadas (`lat`,`lng`) e tipo de incidente.
+- Serviço de tráfego simulando incidentes (`accident`, `jam`).
 
 ### Não inclui
 - Persistência de histórico climático em banco.
@@ -54,6 +56,9 @@
 - [x] CARD 7: `WeatherService.GetWeather(lat,lng)` integrado ao OpenWeather.
 - [x] CARD 8: `MapService` preenche campo `weather` via `WeatherService`.
 - [x] Timeout cancela request sem bloquear fluxo.
+- [x] CARD 9: `Traffic` consistente com `lat`, `lng` e `type`.
+- [x] CARD 10: `TrafficService` retorna incidentes simulados com `lat`/`lng`.
+- [x] CARD 11: `MapService` integra `TrafficService` e devolve `traffic` na resposta.
 
 ## 10) Plano de testes
 - Unitários:
