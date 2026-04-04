@@ -31,6 +31,9 @@ func Read() (*Config, error) {
 	v.BindEnv("app_name", "APP_NAME")
 	v.BindEnv("env", "env")
 	v.BindEnv("database.url", "DATABASE_URL")
+	v.SetDefault("weather.base_url", "https://api.openweathermap.org")
+	v.BindEnv("weather.base_url", "OPENWEATHER_BASE_URL")
+	v.BindEnv("weather.api_key", "OPENWEATHER_API_KEY")
 	err := v.ReadInConfig()
 	if err != nil {
 		var configNotFound viper.ConfigFileNotFoundError
