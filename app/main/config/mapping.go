@@ -5,6 +5,7 @@ type Config struct {
 	App_Name string         `mapstruct:"app_name"`
 	Env      string         `mapstruct:"env"`
 	Database DatabaseConfig `mapstruct:"database"`
+	Weather  WeatherConfig  `mapstruct:"weather"`
 }
 
 type ServerConfig struct {
@@ -14,4 +15,9 @@ type ServerConfig struct {
 
 type DatabaseConfig struct {
 	URL string `mapstruct:"url"`
+}
+
+type WeatherConfig struct {
+	BaseURL string `mapstruct:"base_url"`
+	APIKey  string `mapstruct:"api_key"`
 }

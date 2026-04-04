@@ -4,34 +4,41 @@ import (
 	"context"
 
 	"github.com/brunobotter/map/application/domain"
+	"github.com/brunobotter/map/application/repo"
 )
 
 type MapService interface {
 	GetMapData(ctx context.Context) (*domain.MapData, error)
 }
 
-type mapService struct{}
+type mapService struct {
+	weatherService WeatherService
+	mapRepository  repo.MapRepository
+}
 
-func NewMapService() MapService {
-	return &mapService{}
+func NewMapService(weatherService WeatherService, mapRepository repo.MapRepository) MapService {
+	return &mapService{weatherService: weatherService, mapRepository: mapRepository}
 }
 
 func (s *mapService) GetMapData(ctx context.Context) (*domain.MapData, error) {
-	_ = ctx
+	weather, err := s.weatherService.GetWeather(ctx, -23.55052, -46.633308)
+	if err != nil {
+		weather = domain.Weather{Status: "unknown", Temperature: 0, Unit: "C"}
+	}
+
+	traffic, err := s.mapRepository.GetTraffic()
+	if err != nil {
+		traffic = []domain.Traffic{}
+	}
+
+	events, err := s.mapRepository.GetEvents()
+	if err != nil {
+		events = []domain.MapEvent{}
+	}
 
 	return &domain.MapData{
-		Weather: domain.Weather{
-			Status:      "sunny",
-			Temperature: 27.5,
-			Unit:        "C",
-		},
-		Traffic: []domain.Traffic{
-			{Road: "Avenida Central", Level: "moderate", Status: "slow"},
-			{Road: "Rua das Flores", Level: "light", Status: "flowing"},
-		},
-		Events: []domain.MapEvent{
-			{Title: "Feira de Saúde", Location: "Praça Principal", StartAt: "2026-03-30T09:00:00Z"},
-			{Title: "Mutirão de Vacinação", Location: "Clínica Central", StartAt: "2026-04-02T08:00:00Z"},
-		},
+		Weather: weather,
+		Traffic: traffic,
+		Events:  events,
 	}, nil
 }
