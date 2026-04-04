@@ -13,11 +13,12 @@ type MapService interface {
 
 type mapService struct {
 	weatherService WeatherService
+	trafficService TrafficService
 	mapRepository  repo.MapRepository
 }
 
-func NewMapService(weatherService WeatherService, mapRepository repo.MapRepository) MapService {
-	return &mapService{weatherService: weatherService, mapRepository: mapRepository}
+func NewMapService(weatherService WeatherService, trafficService TrafficService, mapRepository repo.MapRepository) MapService {
+	return &mapService{weatherService: weatherService, trafficService: trafficService, mapRepository: mapRepository}
 }
 
 func (s *mapService) GetMapData(ctx context.Context) (*domain.MapData, error) {
@@ -26,7 +27,7 @@ func (s *mapService) GetMapData(ctx context.Context) (*domain.MapData, error) {
 		weather = domain.Weather{Status: "unknown", Temperature: 0, Unit: "C"}
 	}
 
-	traffic, err := s.mapRepository.GetTraffic()
+	traffic, err := s.trafficService.GetIncidents(ctx, -23.55052, -46.633308)
 	if err != nil {
 		traffic = []domain.Traffic{}
 	}
